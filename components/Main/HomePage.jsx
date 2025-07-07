@@ -309,15 +309,15 @@ const CroatianTaxiSite = () => {
                             <div className="flex flex-wrap gap-4">
                                 <div className="flex items-center space-x-2 bg-white bg-opacity-70 px-4 py-2 rounded-full">
                                     <Shield className="h-5 w-5 text-green-500" />
-                                    <span className="text-sm font-medium">{t('insuredLicensed')}</span>
+                                    <span className="text-sm font-medium text-gray-600">{t('insuredLicensed')}</span>
                                 </div>
                                 <div className="flex items-center space-x-2 bg-white bg-opacity-70 px-4 py-2 rounded-full">
                                     <Star className="h-5 w-5 text-yellow-500" />
-                                    <span className="text-sm font-medium">{t('fiveStarService')}</span>
+                                    <span className="text-sm font-medium text-gray-600">{t('fiveStarService')}</span>
                                 </div>
                                 <div className="flex items-center space-x-2 bg-white bg-opacity-70 px-4 py-2 rounded-full">
                                     <Award className="h-5 w-5 text-blue-500" />
-                                    <span className="text-sm font-medium">{t('professionalDrivers')}</span>
+                                    <span className="text-sm font-medium text-gray-600">{t('professionalDrivers')}</span>
                                 </div>
                             </div>
 
@@ -349,7 +349,7 @@ const CroatianTaxiSite = () => {
                                             onChange={handleInputChange}
                                             placeholder={t('pickupLocation')}
                                             required
-                                            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            className="w-full px-4 py-3 border border-gray-400 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                         />
                                     </div>
 
@@ -365,7 +365,7 @@ const CroatianTaxiSite = () => {
                                             onChange={handleInputChange}
                                             placeholder={t('destination')}
                                             required
-                                            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            className="w-full px-4 py-3 border border-gray-400 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                         />
                                     </div>
                                 </div>
@@ -383,7 +383,7 @@ const CroatianTaxiSite = () => {
                                             onChange={handleInputChange}
                                             min={new Date().toISOString().split('T')[0]}
                                             required
-                                            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            className="w-full px-4 py-3 border border-gray-400 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                         />
                                     </div>
 
@@ -398,7 +398,7 @@ const CroatianTaxiSite = () => {
                                             value={formData.time}
                                             onChange={handleInputChange}
                                             required
-                                            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            className="w-full px-4 py-3 border border-gray-400 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                         />
                                     </div>
                                 </div>
@@ -412,7 +412,7 @@ const CroatianTaxiSite = () => {
                                         name="passengers"
                                         value={formData.passengers}
                                         onChange={handleInputChange}
-                                        className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                        className="w-full px-4 py-3 border border-gray-400 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                     >
                                         {[1,2,3,4,5,6,7,8].map(num => (
                                             <option key={num} value={num}>{num} {num === 1 ? t('person') : t('people')}</option>
@@ -433,7 +433,7 @@ const CroatianTaxiSite = () => {
                                             onChange={handleInputChange}
                                             placeholder="+385 XX XXX XXX"
                                             required
-                                            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            className="w-full px-4 py-3 border border-gray-400 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                         />
                                     </div>
 
@@ -449,7 +449,7 @@ const CroatianTaxiSite = () => {
                                             onChange={handleInputChange}
                                             placeholder="your@email.com"
                                             required
-                                            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            className="w-full px-4 py-3 border border-gray-400 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                         />
                                     </div>
                                 </div>
@@ -497,7 +497,7 @@ const CroatianTaxiSite = () => {
                             <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <MapPin className="h-8 w-8 text-blue-600" />
                             </div>
-                            <h3 className="text-xl font-semibold mb-3">{t('cityTours')}</h3>
+                            <h3 className="text-xl font-semibold mb-3 text-gray-600">{t('cityTours')}</h3>
                             <p className="text-gray-600">
                                 {t('cityToursDesc')}
                             </p>
@@ -507,7 +507,7 @@ const CroatianTaxiSite = () => {
                             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <Car className="h-8 w-8 text-green-600" />
                             </div>
-                            <h3 className="text-xl font-semibold mb-3">{t('airportTransfers')}</h3>
+                            <h3 className="text-xl font-semibold mb-3 text-gray-600">{t('airportTransfers')}</h3>
                             <p className="text-gray-600">
                                 {t('airportTransfersDesc')}
                             </p>
@@ -517,7 +517,7 @@ const CroatianTaxiSite = () => {
                             <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <Star className="h-8 w-8 text-purple-600" />
                             </div>
-                            <h3 className="text-xl font-semibold mb-3">{t('specialEvents')}</h3>
+                            <h3 className="text-xl font-semibold mb-3 text-gray-600">{t('specialEvents')}</h3>
                             <p className="text-gray-600">
                                 {t('specialEventsDesc')}
                             </p>
@@ -540,7 +540,7 @@ const CroatianTaxiSite = () => {
                                         <Clock className="h-5 w-5 text-blue-600" />
                                     </div>
                                     <div>
-                                        <h3 className="text-lg font-semibold mb-2">{t('availability247')}</h3>
+                                        <h3 className="text-lg font-semibold mb-2 text-gray-600">{t('availability247')}</h3>
                                         <p className="text-gray-600">{t('availability247Desc')}</p>
                                     </div>
                                 </div>
@@ -550,7 +550,7 @@ const CroatianTaxiSite = () => {
                                         <Shield className="h-5 w-5 text-green-600" />
                                     </div>
                                     <div>
-                                        <h3 className="text-lg font-semibold mb-2">{t('safeInsured')}</h3>
+                                        <h3 className="text-lg font-semibold mb-2 text-gray-600">{t('safeInsured')}</h3>
                                         <p className="text-gray-600">{t('safeInsuredDesc')}</p>
                                     </div>
                                 </div>
@@ -560,7 +560,7 @@ const CroatianTaxiSite = () => {
                                         <Award className="h-5 w-5 text-purple-600" />
                                     </div>
                                     <div>
-                                        <h3 className="text-lg font-semibold mb-2">{t('competitiveRates')}</h3>
+                                        <h3 className="text-lg font-semibold mb-2 text-gray-600">{t('competitiveRates')}</h3>
                                         <p className="text-gray-600">{t('competitiveRatesDesc')}</p>
                                     </div>
                                 </div>
