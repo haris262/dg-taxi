@@ -1,30 +1,19 @@
 import HomePage from '../components/Main/HomePage';
 import { translations } from '../components/Translations/translations_index.js';
-import { Metadata, ResolvingMetadata } from 'next';
+import { Metadata } from 'next';
 
-// Type for translation keys (replace with your actual keys)
-type TranslationKey =
-    | 'metaTitle'
-    | 'metaDescription'
-    | /* add other translation keys here */ string;
+// Use inferred keys from your `translations['en']` object if you want full safety
+type TranslationKey = keyof typeof translations['en'];
 
-// Type-safe translation function
 type TranslateFunction = (key: TranslationKey) => string;
 
-// Define proper types for generateMetadata parameters
-interface GenerateMetadataProps {
-  params: Record<string, string | string[]>; // Or more specific if needed
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = 'en'; // Hardcoded default, replace with dynamic if needed
 
-export async function generateMetadata(
-    { params, searchParams }: GenerateMetadataProps,
-    parent: ResolvingMetadata
-): Promise<Metadata> {
-  const lang = 'en'; // Default language for metadata
-  const t: TranslateFunction = (key) => (translations as any)[lang][key] || key;
+  const t: TranslateFunction = (key) => {
+    return translations[lang]?.[key] || key;
+  };
 
-  // Consider adding type safety for your images array
   const images = [
     {
       url: 'https://yourdomain.com/trogir5.webp',
@@ -39,7 +28,7 @@ export async function generateMetadata(
     description: t('metaDescription'),
     alternates: {
       canonical: '/',
-      languages : {
+      languages: {
         'hr-HR': '/hr',
         'en-US': '/en',
         'de-DE': '/de',
@@ -56,7 +45,7 @@ export async function generateMetadata(
         'cs-CZ': '/cs',
         'hu-HU': '/hu',
         'ro-RO': '/ro',
-      }
+      },
     },
     openGraph: {
       title: t('metaTitle'),
