@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
     title: "D&G Taxi Trogir",
     description: "Reliable taxi and transfers from Trogir and Split Airport to all destinations in Croatia.",
+    icons: {
+        icon: './logo.png'
+    }
 };
 
 export default function RootLayout({

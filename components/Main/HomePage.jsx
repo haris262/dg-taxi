@@ -8,7 +8,7 @@ import {
 import Image from 'next/image';
 import emailjs from 'emailjs-com';
 import trogir from '../../public/assets/trogir5.webp';
-import trogirMobile from '../../public/assets/trogir_mobile.jpg';
+import trogirMobile from '../../public/assets/trogir_mobile3.webp';
 import { useMediaQuery } from 'react-responsive';
 import { useTranslation } from '../Layout/GlobalLayout'; // Import hook from the new layout file
 
