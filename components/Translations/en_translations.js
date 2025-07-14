@@ -70,6 +70,21 @@ export const en = {
     // Experience highlight
     experienceSince: "Since 1988 - Over 35 years of experience",
 
+    // Reviews Section
+    whatOurClientsSay: "What Our Clients Say",
+    addYourReview: "Add Your Review",
+
+    // Add Review Page
+    writeAReview: "Write a Review",
+    backToHome: "Back to Home",
+    yourName: "Your Name",
+    yourEmail: "Your Email",
+    rating: "Rating",
+    review: "Review",
+    submitReview: "Submit Review",
+    reviewSuccess: "Thank you! Your review has been submitted.",
+    reviewError: "Something went wrong. Please try again.",
+    submitting: "Submitting...",
 
     //SEO
     metaTitle: "Taxi Trogir & Split Airport Transfers | D&G",
