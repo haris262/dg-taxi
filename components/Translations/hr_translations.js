@@ -4,8 +4,8 @@ export const hr = {
     callUs: "+385 99 323 0277",
 
     // Hero Section
-    h1_main: "Vaš Pouzdan",
-    h1_highlight: "Taksi Servis",
+    h1_main: "Taksi Trogir i",
+    h1_highlight: "Transferi Zračne Luke Split",
     heroSubtitle: "Vaš pouzdan, profesionalan taksi servis u Trogiru. Nudimo aerodromske transfere i duga putovanja do bilo koje destinacije. Rezervirajte svoju vožnju danas!",
 
     // Badges
@@ -85,6 +85,51 @@ export const hr = {
     reviewSuccess: "Hvala! Vaša recenzija je poslana.",
     reviewError: "Nešto je pošlo po zlu. Molimo pokušajte ponovno.",
     submitting: "Slanje...",
+
+    // --- Redesign additions ---
+    // Header / actions
+    reserve: "Rezerviraj",
+    reserveYourRide: "Rezervirajte vožnju",
+    available247Short: "Dostupni 0–24",
+    callAction: "Nazovi",
+    quickReserve: "Rezervirajte vožnju",
+    whatsappCta: "Rezervirajte odmah putem WhatsAppa",
+    chatOnWhatsapp: "Pišite nam na WhatsApp",
+
+    // Hero
+    heroEyebrow: "Privatni transferi · Od 1988.",
+    noPaymentNote: "Bez predujma — fiksnu cijenu potvrđujemo e-poštom ili WhatsAppom.",
+
+    // Section eyebrows
+    eyebrowServices: "Što nudimo",
+    eyebrowHowItWorks: "Jednostavno i brzo",
+    eyebrowDestinations: "Pokrivenost",
+    eyebrowReviews: "Recenzije",
+    eyebrowWhyUs: "D&G standard",
+
+    // How It Works
+    howItWorks: "Kako funkcionira rezervacija",
+    howItWorksSubtitle: "Rezervirajte transfer u manje od minute — bez registracije i predujma.",
+    step1Title: "Pošaljite upit",
+    step1Desc: "Recite nam mjesto polaska, odredište, datum i vrijeme. Vaši podaci stižu nam odmah.",
+    step2Title: "Primite potvrdu",
+    step2Desc: "Brzo odgovaramo e-poštom ili WhatsAppom s fiksnom cijenom i podacima o vozaču.",
+    step3Title: "Uživajte u vožnji",
+    step3Desc: "Vaš profesionalni vozač stiže na vrijeme. Opustite se i uživajte u Hrvatskoj.",
+
+    // Destinations gallery
+    destinationsTitle: "Kamo vas vozimo",
+    destinationsSubtitle: "Iz naše baze u Trogiru duž dalmatinske obale i šire — zračne luke, povijesni gradovi i nacionalni parkovi.",
+    galleryTrogirOldTown: "Stari grad Trogir",
+    galleryRiva: "Trogirska riva",
+    galleryHarbour: "Jadranska luka",
+    galleryWaterfront: "Trogirska rivijera",
+
+    // Footer additions
+    serviceHours: "Radno vrijeme",
+    hours247: "Otvoreno 0–24 · Dan i noć",
+    coverageArea: "Područje pokrivenosti",
+    coverageList: "Trogir · Zračna luka Split · Zadar · Dubrovnik · Zagreb · Krka · Plitvice",
 
     //SEO
     metaTitle: "Taxi Trogir & Zračna luka Split Transferi | D&G",

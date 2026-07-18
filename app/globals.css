@@ -1,26 +1,307 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ------------------------------------------------------------------ */
+/*  D&G Taxi Trogir — Premium design system                            */
+/*  Deep navy · champagne gold · warm cream                            */
+/* ------------------------------------------------------------------ */
+
+@theme {
+    --color-navy-950: #06131f;
+    --color-navy-900: #0a1b2e;
+    --color-navy-800: #0e2439;
+    --color-navy-700: #12314c;
+    --color-navy-600: #1b4160;
+
+    --color-gold: #c6a15b;
+    --color-gold-light: #e4ce9a;
+    --color-gold-deep: #9a7331;
+
+    --color-cream: #f7f4ef;
+    --color-paper: #fbfaf7;
+    --color-ink: #16283a;
+    --color-muted: #5c6e7e;
+
+    --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-display: var(--font-playfair), ui-serif, Georgia, "Times New Roman", serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ----------------------------- Base -------------------------------- */
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background: var(--color-paper);
+        color: var(--color-ink);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    h1, h2, h3, h4 {
+        font-family: var(--font-display);
+        color: var(--color-ink);
+        letter-spacing: -0.01em;
+    }
+
+    ::selection {
+        background: var(--color-gold);
+        color: var(--color-navy-950);
+    }
+
+    /* Tasteful focus ring for keyboard users */
+    :focus-visible {
+        outline: 2px solid var(--color-gold);
+        outline-offset: 2px;
+    }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* --------------------------- Components ---------------------------- */
+
+/* Eyebrow / section kicker */
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-gold-deep);
+}
+.eyebrow::before {
+    content: "";
+    width: 26px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.8;
+}
+.eyebrow.is-centered::after {
+    content: "";
+    width: 26px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.8;
+}
+.eyebrow--light {
+    color: var(--color-gold-light);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    border-radius: 9999px;
+    padding: 0.95rem 1.9rem;
+    transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.btn-gold {
+    background: var(--color-gold);
+    color: var(--color-navy-950);
+    box-shadow: 0 12px 30px -12px rgba(198, 161, 91, 0.65);
+}
+.btn-gold:hover {
+    background: var(--color-gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 18px 40px -14px rgba(198, 161, 91, 0.8);
+}
+.btn-gold:disabled {
+    opacity: 0.6;
+    transform: none;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+.btn-outline {
+    background: transparent;
+    color: var(--color-gold);
+    border: 1px solid rgba(198, 161, 91, 0.55);
+}
+.btn-outline:hover {
+    background: var(--color-gold);
+    color: var(--color-navy-950);
+    transform: translateY(-2px);
+}
+.btn-dark {
+    background: var(--color-navy-900);
+    color: #fff;
+}
+.btn-dark:hover {
+    background: var(--color-navy-700);
+    transform: translateY(-2px);
+}
+.btn-whatsapp {
+    background: #1fa855;
+    color: #fff;
+}
+.btn-whatsapp:hover {
+    background: #178f47;
+    transform: translateY(-2px);
+}
+
+/* Surfaces */
+.card {
+    background: #fff;
+    border: 1px solid rgba(22, 40, 58, 0.07);
+    border-radius: 1rem;
+    box-shadow: 0 1px 2px rgba(16, 40, 58, 0.04), 0 18px 40px -24px rgba(16, 40, 58, 0.28);
+}
+.lift {
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+.lift:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 1px 2px rgba(16, 40, 58, 0.05), 0 30px 55px -28px rgba(16, 40, 58, 0.4);
+    border-color: rgba(198, 161, 91, 0.4);
+}
+
+/* Icon medallion */
+.medallion {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 9999px;
+    background: rgba(198, 161, 91, 0.12);
+    color: var(--color-gold-deep);
+    border: 1px solid rgba(198, 161, 91, 0.28);
+}
+.medallion--dark {
+    background: rgba(198, 161, 91, 0.14);
+    color: var(--color-gold-light);
+    border-color: rgba(198, 161, 91, 0.35);
+}
+
+/* Glass trust badge (over hero image) */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.95rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 500;
+    backdrop-filter: blur(8px);
+}
+
+/* Form fields */
+.field {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(22, 40, 58, 0.16);
+    background: #fff;
+    color: var(--color-ink);
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.field::placeholder {
+    color: #9aa7b2;
+}
+.field:focus {
+    outline: none;
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px rgba(198, 161, 91, 0.18);
+}
+.field-label {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-navy-700);
+    margin-bottom: 0.4rem;
+}
+
+/* Hairline divider */
+.hairline {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(198, 161, 91, 0.5), transparent);
+    border: 0;
+}
+
+/* Section rhythm helper */
+.section {
+    padding-block: clamp(4rem, 8vw, 7rem);
+}
+
+/* -------------------------- Animations ----------------------------- */
+.reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    will-change: opacity, transform;
+}
+.reveal.is-in {
+    opacity: 1;
+    transform: none;
+}
+
+@keyframes rise-in {
+    from {
+        opacity: 0;
+        transform: translateY(26px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+.animate-rise {
+    animation: rise-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.delay-1 { animation-delay: 0.12s; }
+.delay-2 { animation-delay: 0.24s; }
+.delay-3 { animation-delay: 0.36s; }
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal,
+    .animate-rise {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Utility: subtle textured navy for dark sections */
+.bg-navy-texture {
+    background-color: var(--color-navy-900);
+    background-image:
+        radial-gradient(1200px 500px at 80% -10%, rgba(198, 161, 91, 0.1), transparent 60%),
+        radial-gradient(900px 500px at 0% 110%, rgba(27, 65, 96, 0.55), transparent 55%);
+}
+
+/* ------------------------- WhatsApp emphasis ----------------------- */
+@keyframes wa-ring-white {
+    0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5); }
+    70% { box-shadow: 0 0 0 12px rgba(255, 255, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+@keyframes wa-ring-green {
+    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.55); }
+    70% { box-shadow: 0 0 0 16px rgba(37, 211, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+.wa-pulse-white { animation: wa-ring-white 2.2s ease-out infinite; }
+.wa-pulse-green { animation: wa-ring-green 2.4s ease-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+    .wa-pulse-white,
+    .wa-pulse-green { animation: none !important; }
 }

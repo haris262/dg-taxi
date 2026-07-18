@@ -1,27 +1,10 @@
 "use client";
-import React, { useState, createContext, useContext } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { Star, ChevronLeft } from 'lucide-react';
 import emailjs from 'emailjs-com';
-
-// You'll need to make your TranslationProvider and hooks accessible globally,
-// perhaps in your main layout. For now, we'll redefine it here for simplicity.
-import { translations } from '../../components/Translations/translations_index.js';
-
-const TranslationContext = createContext();
-const useTranslation = () => useContext(TranslationContext);
-
-const TranslationProvider = ({ children }) => {
-    const [currentLanguage, setCurrentLanguage] = useState('en');
-    const t = (key) => translations[currentLanguage]?.[key] || key;
-    const switchLanguage = (lang) => setCurrentLanguage(lang); // This won't sync with the homepage language state without a global provider
-
-    return (
-        <TranslationContext.Provider value={{ t, currentLanguage, switchLanguage }}>
-            {children}
-        </TranslationContext.Provider>
-    );
-};
+// Use the shared, language-synced translation provider from the global layout.
+import { useTranslation } from '../../../components/Layout/GlobalLayout';
 
 // --- EMAILJS CONFIG ---
 const EMAILJS_CONFIG = {
@@ -30,8 +13,8 @@ const EMAILJS_CONFIG = {
     REVIEW_TEMPLATE_ID: 'template_zsbfuiz' // IMPORTANT: Use the same new template ID
 };
 
-const AddReviewPage = () => {
-    const { t } = useTranslation();
+export default function AddReviewPage() {
+    const { t, currentLanguage } = useTranslation();
     const [formData, setFormData] = useState({ name: '', email: '', rating: 5, review: '' });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState('');
@@ -76,55 +59,63 @@ const AddReviewPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-20 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl mx-auto">
-                <Link href="/" className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 mb-8 font-medium">
-                    <ChevronLeft className="h-5 w-5" />
+        <div className="bg-cream section min-h-[70vh]">
+            <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+                <Link href={`/${currentLanguage}`} className="inline-flex items-center gap-2 text-muted hover:text-gold transition-colors mb-8 text-sm font-medium">
+                    <ChevronLeft className="h-4 w-4" />
                     <span>{t('backToHome')}</span>
                 </Link>
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-white/20">
-                    <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">{t('writeAReview')}</h1>
-                    <div className="space-y-6">
+
+                <div className="card !rounded-2xl relative p-6 sm:p-10">
+                    <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
+                    <div className="text-center mb-8">
+                        <span className="eyebrow is-centered justify-center">{t('eyebrowReviews')}</span>
+                        <h1 className="mt-3 font-display text-3xl sm:text-4xl">{t('writeAReview')}</h1>
+                    </div>
+
+                    <div className="space-y-5">
                         <div className="grid sm:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('yourName')}</label>
-                                <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                                <label className="field-label">{t('yourName')}</label>
+                                <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="field" />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('yourEmail')}</label>
-                                <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                                <label className="field-label">{t('yourEmail')}</label>
+                                <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="field" />
                             </div>
                         </div>
+
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">{t('rating')}</label>
-                            <div className="flex space-x-1">
+                            <label className="field-label">{t('rating')}</label>
+                            <div className="flex gap-1.5">
                                 {[1, 2, 3, 4, 5].map(star => (
-                                    <Star key={star} onClick={() => handleRatingChange(star)} className={`h-8 w-8 cursor-pointer transition-colors ${formData.rating >= star ? 'text-yellow-500 fill-current' : 'text-gray-300'}`} />
+                                    <button
+                                        type="button"
+                                        key={star}
+                                        onClick={() => handleRatingChange(star)}
+                                        aria-label={`${star} star${star > 1 ? 's' : ''}`}
+                                        className="transition-transform hover:scale-110"
+                                    >
+                                        <Star className={`h-8 w-8 cursor-pointer transition-colors ${formData.rating >= star ? 'text-gold fill-current' : 'text-gray-300'}`} />
+                                    </button>
                                 ))}
                             </div>
                         </div>
+
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('review')}</label>
-                            <textarea name="review" value={formData.review} onChange={handleInputChange} rows="5" className="w-full px-4 py-3 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                            <label className="field-label">{t('review')}</label>
+                            <textarea name="review" value={formData.review} onChange={handleInputChange} rows="5" className="field resize-none"></textarea>
                         </div>
-                        <button onClick={handleSubmit} disabled={isSubmitting} className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-4 rounded-lg disabled:opacity-50">
+
+                        <button onClick={handleSubmit} disabled={isSubmitting} className="btn btn-gold w-full !py-4">
                             {isSubmitting ? t('submitting') : t('submitReview')}
                         </button>
-                        {submitStatus === 'success' && <div className="text-green-600 text-center bg-green-50 p-3 rounded-lg">{t('reviewSuccess')}</div>}
-                        {submitStatus === 'error' && <div className="text-red-600 text-center bg-red-50 p-3 rounded-lg">{t('reviewError')}</div>}
+
+                        {submitStatus === 'success' && <div className="text-green-700 text-center bg-green-50 border border-green-200 p-3 rounded-lg text-sm">{t('reviewSuccess')}</div>}
+                        {submitStatus === 'error' && <div className="text-red-700 text-center bg-red-50 border border-red-200 p-3 rounded-lg text-sm">{t('reviewError')}</div>}
                     </div>
                 </div>
             </div>
         </div>
     );
-};
-
-
-// The final component exported should be wrapped in the provider
-export default function AddReviewPageWrapper() {
-    return (
-        <TranslationProvider>
-            <AddReviewPage />
-        </TranslationProvider>
-    )
 }

@@ -1,14 +1,19 @@
 "use client";
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import {
     Phone, Mail, MapPin, Clock, Users, Calendar,
-    Car, Star, Shield, Award, ChevronLeft, ChevronRight, UserCircle
+    Car, Star, Shield, Award, ChevronLeft, ChevronRight, UserCircle,
+    Plane, Landmark, Gem, Quote, CheckCircle2, Send, ArrowRight
 } from 'lucide-react';
 import Image from 'next/image';
 import emailjs from 'emailjs-com';
 import trogir from '../../public/assets/trogir5.webp';
 import trogirMobile from '../../public/assets/trogir_mobile3.webp';
+import trogir1 from '../../public/assets/trogir1.jpg';
+import trogir2 from '../../public/assets/trogir2.jpg';
+import trogir3 from '../../public/assets/trogir3.jpg';
+import trogir4 from '../../public/assets/trogir4.webp';
 import { useMediaQuery } from 'react-responsive';
 import { useTranslation } from '../Layout/GlobalLayout'; // Import hook from the new layout file
 
@@ -72,65 +77,90 @@ const mockReviews = [
     { name: "Marija Đ.", rating: 5, review: "Absolutely incredible service. From booking to arrival, everything was seamless and stress-free. Would recommend to anyone visiting Croatia!" },
 ];
 
+// --- Scroll-reveal wrapper (progressive enhancement) ---
+const Reveal = ({ children, className = '', delay = 0 }) => {
+    const ref = useRef(null);
+    const [shown, setShown] = useState(false);
+
+    useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        if (typeof IntersectionObserver === 'undefined') { setShown(true); return; }
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) { setShown(true); io.unobserve(entry.target); }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+        io.observe(el);
+        return () => io.disconnect();
+    }, []);
+
+    return (
+        <div
+            ref={ref}
+            style={delay ? { transitionDelay: `${delay}ms` } : undefined}
+            className={`reveal ${shown ? 'is-in' : ''} ${className}`}
+        >
+            {children}
+        </div>
+    );
+};
+
 // --- REVIEW SLIDER COMPONENT ---
 const ReviewSlider = () => {
-    const { t } = useTranslation();
+    const { t, currentLanguage } = useTranslation();
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const nextSlide = () => setCurrentIndex(prev => (prev + 1) % mockReviews.length);
     const prevSlide = () => setCurrentIndex(prev => (prev - 1 + mockReviews.length) % mockReviews.length);
 
     useEffect(() => {
-        const timer = setInterval(nextSlide, 5000); // Auto-scroll every 5 seconds
+        const timer = setInterval(nextSlide, 6000); // Auto-scroll every 6 seconds
         return () => clearInterval(timer);
     }, []);
 
+    const review = mockReviews[currentIndex];
+
     return (
-        <section className="py-20 bg-white/50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <h2 className="text-4xl font-bold text-gray-800 mb-4">{t('whatOurClientsSay')}</h2>
-                </div>
-                <div className="relative">
-                    <div className="overflow-hidden relative h-64">
-                        {mockReviews.map((review, index) => (
-                            <div key={index} className={`absolute w-full transition-opacity duration-500 ease-in-out ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}>
-                                <div className="bg-white/70 rounded-xl shadow-lg p-8 max-w-3xl mx-auto flex items-start space-x-6">
-                                    {review.image ? (
-                                        <Image src={review.image} alt={review.name} width={80} height={80} className="rounded-full border-4 border-blue-200" />
-                                    ) : (
-                                        <div className="flex-shrink-0 w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
-                                            <UserCircle className="h-12 w-12 text-blue-500" />
-                                        </div>
-                                    )}
-                                    <div className="flex-grow">
-                                        <div className="flex items-center mb-2">
-                                            {[...Array(review.rating)].map((_, i) => <Star key={i} className="h-5 w-5 text-yellow-500 fill-current" />)}
-                                        </div>
-                                        <p className="text-gray-600 italic mb-4">"{review.review}"</p>
-                                        <p className="font-semibold text-gray-800">- {review.name}</p>
-                                    </div>
-                                </div>
+        <section className="section bg-navy-texture text-white">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <Reveal className="text-center max-w-2xl mx-auto">
+                    <span className="eyebrow eyebrow--light justify-center">{t('eyebrowReviews')}</span>
+                    <h2 className="mt-4 font-display text-3xl sm:text-4xl text-white">{t('whatOurClientsSay')}</h2>
+                </Reveal>
+
+                <div className="relative mt-12">
+                    <div className="rounded-2xl border border-gold/20 bg-white/[0.04] backdrop-blur-sm p-8 sm:p-12 text-center min-h-[280px] flex flex-col items-center justify-center">
+                        <Quote className="h-9 w-9 text-gold/70 mb-5" />
+                        <div key={currentIndex} className="animate-rise">
+                            <div className="flex justify-center gap-1 mb-5">
+                                {[...Array(review.rating)].map((_, i) => <Star key={i} className="h-5 w-5 text-gold fill-current" />)}
                             </div>
-                        ))}
+                            <p className="font-display text-xl sm:text-2xl leading-relaxed text-white/90 italic max-w-2xl mx-auto">“{review.review}”</p>
+                            <p className="mt-6 text-sm font-semibold tracking-[0.15em] text-gold uppercase">{review.name}</p>
+                        </div>
                     </div>
-                    <button onClick={prevSlide} className="absolute top-1/2 left-0 sm:-left-4 sm:top-24 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition">
-                        <ChevronLeft className="h-6 w-6 text-gray-700" />
-                    </button>
-                    <button onClick={nextSlide} className="absolute top-1/2 right-0 sm:-right-4 sm:top-24 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition">
-                        <ChevronRight className="h-6 w-6 text-gray-700" />
-                    </button>
+
+                    <div className="flex items-center justify-center gap-4 mt-8">
+                        <button onClick={prevSlide} aria-label="Previous review" className="h-11 w-11 rounded-full border border-white/20 flex items-center justify-center text-white/80 hover:border-gold hover:text-gold transition-colors">
+                            <ChevronLeft className="h-5 w-5" />
+                        </button>
+                        <span className="text-sm text-white/50 tabular-nums w-20 text-center">
+                            {String(currentIndex + 1).padStart(2, '0')} / {mockReviews.length}
+                        </span>
+                        <button onClick={nextSlide} aria-label="Next review" className="h-11 w-11 rounded-full border border-white/20 flex items-center justify-center text-white/80 hover:border-gold hover:text-gold transition-colors">
+                            <ChevronRight className="h-5 w-5" />
+                        </button>
+                    </div>
                 </div>
-                <div className="text-center mt-12">
-                    <Link href="/add-review" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 inline-block">
-                        {t('addYourReview')}
-                    </Link>
+
+                <div className="text-center mt-10">
+                    <Link href={`/${currentLanguage}/add-review`} className="btn btn-outline">{t('addYourReview')}</Link>
                 </div>
             </div>
         </section>
     );
 };
-
 
 // This is the main content for the home page.
 const HomePageContent = () => {
@@ -185,153 +215,254 @@ const HomePageContent = () => {
         setTimeout(() => setSubmitStatus(''), 5000);
     };
 
+    const services = [
+        { icon: Landmark, title: t('cityTours'), desc: t('cityToursDesc') },
+        { icon: Plane, title: t('airportTransfers'), desc: t('airportTransfersDesc') },
+        { icon: Gem, title: t('specialEvents'), desc: t('specialEventsDesc') },
+    ];
+
+    const steps = [
+        { icon: Send, title: t('step1Title'), desc: t('step1Desc') },
+        { icon: CheckCircle2, title: t('step2Title'), desc: t('step2Desc') },
+        { icon: Car, title: t('step3Title'), desc: t('step3Desc') },
+    ];
+
+    const features = [
+        { icon: Clock, title: t('availability247'), desc: t('availability247Desc') },
+        { icon: Shield, title: t('safeInsured'), desc: t('safeInsuredDesc') },
+        { icon: Award, title: t('competitiveRates'), desc: t('competitiveRatesDesc') },
+    ];
+
+    const gallery = [
+        { src: trogir3, label: t('galleryTrogirOldTown') },
+        { src: trogir1, label: t('galleryRiva') },
+        { src: trogir2, label: t('galleryHarbour') },
+        { src: trogir4, label: t('galleryWaterfront') },
+    ];
+
+    const destinations = ['Split Airport', 'Split', 'Trogir', 'Zadar', 'Dubrovnik', 'Zagreb', 'Krka NP', 'Plitvice'];
+
     return (
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50">
-            {/* Hero Section with Reservation Form */}
-            <section className="relative py-20 px-4 sm:px-6 lg:px-8">
-                <Image
-                    style={{ position: 'absolute', top: 0, left: 0, zIndex: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-                    src={isMobile ? trogirMobile : trogir}
-                    alt={"Trogir"}
-                    priority
-                />
-                <div className="max-w-7xl mx-auto relative z-1">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
-                        <div className="space-y-8">
-                            <div className="space-y-4">
-                                <h1 className="text-5xl lg:text-6xl font-bold text-gray-800 leading-tight">
-                                    <span className="block">{t('h1_main')}</span>
-                                    <span className="text-blue-600 block">{t('h1_highlight')}</span>
-                                </h1>
-                                <p className="text-xl text-black leading-relaxed">{t('heroSubtitle')}</p>
+        <div>
+            {/* ============================ HERO ============================ */}
+            <section id="top" className="relative isolate overflow-hidden">
+                <div className="absolute inset-0 -z-10">
+                    <Image
+                        src={isMobile ? trogirMobile : trogir}
+                        alt="Trogir waterfront on the Dalmatian coast, Croatia"
+                        fill
+                        sizes="100vw"
+                        priority
+                        className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-br from-navy-950/92 via-navy-900/82 to-navy-950/90" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-transparent to-navy-950/30" />
+                </div>
+
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-24">
+                    <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+                        {/* Copy */}
+                        <div className="text-white">
+                            <span className="eyebrow eyebrow--light animate-rise">{t('heroEyebrow')}</span>
+                            <h1 className="mt-5 text-white font-display font-semibold text-4xl sm:text-5xl lg:text-[3.75rem] leading-[1.05] animate-rise delay-1">
+                                <span className="block">{t('h1_main')}</span>
+                                <span className="block text-gold">{t('h1_highlight')}</span>
+                            </h1>
+                            <p className="mt-6 text-lg text-white/80 max-w-xl leading-relaxed animate-rise delay-2">{t('heroSubtitle')}</p>
+
+                            <div className="mt-7 flex flex-wrap gap-2.5 animate-rise delay-2">
+                                <span className="badge"><Shield className="h-4 w-4 text-gold" />{t('insuredLicensed')}</span>
+                                <span className="badge"><Star className="h-4 w-4 text-gold" />{t('fiveStarService')}</span>
+                                <span className="badge"><Award className="h-4 w-4 text-gold" />{t('professionalDrivers')}</span>
                             </div>
-                            <div className="flex flex-wrap gap-4">
-                                <div className="flex items-center space-x-2 bg-white bg-opacity-70 px-4 py-2 rounded-full"><Shield className="h-5 w-5 text-green-500" /> <span className="text-sm font-medium text-gray-600">{t('insuredLicensed')}</span></div>
-                                <div className="flex items-center space-x-2 bg-white bg-opacity-70 px-4 py-2 rounded-full"><Star className="h-5 w-5 text-yellow-500" /> <span className="text-sm font-medium text-gray-600">{t('fiveStarService')}</span></div>
-                                <div className="flex items-center space-x-2 bg-white bg-opacity-70 px-4 py-2 rounded-full"><Award className="h-5 w-5 text-blue-500" /> <span className="text-sm font-medium text-gray-600">{t('professionalDrivers')}</span></div>
-                            </div>
-                            <div className="bg-gradient-to-r from-amber-100 to-orange-100 p-4 rounded-lg border-l-4 border-amber-500">
-                                <p className="text-amber-800 font-semibold flex items-center"><Award className="h-5 w-5 mr-2" />{t('experienceSince')}</p>
+
+                            <div className="mt-7 inline-flex items-center gap-3 rounded-full border border-gold/30 bg-white/5 px-5 py-2.5 backdrop-blur-sm animate-rise delay-3">
+                                <Award className="h-5 w-5 text-gold" />
+                                <span className="text-sm font-medium text-white/90">{t('experienceSince')}</span>
                             </div>
                         </div>
 
-                        {/* Reservation Form */}
-                        <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-white/20 booking-form">
-                            <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">{t('bookYourRide')}</h2>
-                            <div className="space-y-6">
+                        {/* Reservation form */}
+                        <div id="booking" className="booking-form scroll-mt-32 card !rounded-2xl relative p-6 sm:p-8 animate-rise delay-2">
+                            <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
+                            <div className="text-center mb-6">
+                                <h2 className="font-display text-2xl sm:text-3xl">{t('bookYourRide')}</h2>
+                                <p className="text-sm text-muted mt-2">{t('noPaymentNote')}</p>
+                            </div>
+                            <div className="space-y-4">
                                 <div className="grid sm:grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <label className="flex items-center space-x-2 text-sm font-medium text-gray-700"><MapPin className="h-4 w-4 text-blue-500" /><span>{t('from')}</span></label>
-                                        <input type="text" name="startLocation" value={formData.startLocation} onChange={handleInputChange} placeholder={t('pickupLocation')} required className="w-full px-4 py-3 border border-gray-400 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                                    <div>
+                                        <label className="field-label"><MapPin className="h-4 w-4 text-gold" /><span>{t('from')}</span></label>
+                                        <input type="text" name="startLocation" value={formData.startLocation} onChange={handleInputChange} placeholder={t('pickupLocation')} required className="field" />
                                     </div>
-                                    <div className="space-y-2">
-                                        <label className="flex items-center space-x-2 text-sm font-medium text-gray-700"><MapPin className="h-4 w-4 text-red-500" /><span>{t('to')}</span></label>
-                                        <input type="text" name="destination" value={formData.destination} onChange={handleInputChange} placeholder={t('destination')} required className="w-full px-4 py-3 border border-gray-400 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                                    <div>
+                                        <label className="field-label"><MapPin className="h-4 w-4 text-gold" /><span>{t('to')}</span></label>
+                                        <input type="text" name="destination" value={formData.destination} onChange={handleInputChange} placeholder={t('destination')} required className="field" />
                                     </div>
                                 </div>
                                 <div className="grid sm:grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <label className="flex items-center space-x-2 text-sm font-medium text-gray-700"><Calendar className="h-4 w-4 text-green-500" /><span>{t('date')}</span></label>
-                                        <input type="date" name="date" value={formData.date} onChange={handleInputChange} min={new Date().toISOString().split('T')[0]} required className="w-full px-4 py-3 border border-gray-400 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                                    <div>
+                                        <label className="field-label"><Calendar className="h-4 w-4 text-gold" /><span>{t('date')}</span></label>
+                                        <input type="date" name="date" value={formData.date} onChange={handleInputChange} min={new Date().toISOString().split('T')[0]} required className="field" />
                                     </div>
-                                    <div className="space-y-2">
-                                        <label className="flex items-center space-x-2 text-sm font-medium text-gray-700"><Clock className="h-4 w-4 text-purple-500" /><span>{t('time')}</span></label>
-                                        <input type="time" name="time" value={formData.time} onChange={handleInputChange} required className="w-full px-4 py-3 border border-gray-400 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                                    <div>
+                                        <label className="field-label"><Clock className="h-4 w-4 text-gold" /><span>{t('time')}</span></label>
+                                        <input type="time" name="time" value={formData.time} onChange={handleInputChange} required className="field" />
                                     </div>
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="flex items-center space-x-2 text-sm font-medium text-gray-700"><Users className="h-4 w-4 text-orange-500" /><span>{t('passengers')}</span></label>
-                                    <select name="passengers" value={formData.passengers} onChange={handleInputChange} className="w-full px-4 py-3 border border-gray-400 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <div>
+                                    <label className="field-label"><Users className="h-4 w-4 text-gold" /><span>{t('passengers')}</span></label>
+                                    <select name="passengers" value={formData.passengers} onChange={handleInputChange} className="field">
                                         {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (<option key={num} value={num}>{num} {num === 1 ? t('person') : t('people')}</option>))}
                                     </select>
                                 </div>
                                 <div className="grid sm:grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <label className="flex items-center space-x-2 text-sm font-medium text-gray-700"><Phone className="h-4 w-4 text-green-500" /><span>{t('phone')}</span></label>
-                                        <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="+385 XX XXX XXX" required className="w-full px-4 py-3 border border-gray-400 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                                    <div>
+                                        <label className="field-label"><Phone className="h-4 w-4 text-gold" /><span>{t('phone')}</span></label>
+                                        <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="+385 XX XXX XXX" required className="field" />
                                     </div>
-                                    <div className="space-y-2">
-                                        <label className="flex items-center space-x-2 text-sm font-medium text-gray-700"><Mail className="h-4 w-4 text-blue-500" /><span>{t('email')}</span></label>
-                                        <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="your@email.com" required className="w-full px-4 py-3 border border-gray-400 text-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                                    <div>
+                                        <label className="field-label"><Mail className="h-4 w-4 text-gold" /><span>{t('email')}</span></label>
+                                        <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="your@email.com" required className="field" />
                                     </div>
                                 </div>
-                                <button type="button" onClick={handleSubmit} disabled={isSubmitting} className="w-full cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:transform-none">
+                                <button type="button" onClick={handleSubmit} disabled={isSubmitting} className="btn btn-gold w-full !py-4">
                                     {isSubmitting ? t('booking') : t('bookRide')}
+                                    {!isSubmitting && <ArrowRight className="h-4 w-4" />}
                                 </button>
-                                {submitStatus === 'success' && <div className="text-green-600 text-center font-medium bg-green-50 p-3 rounded-lg">{t('bookingSuccess')}</div>}
-                                {submitStatus === 'error' && <div className="text-red-600 text-center font-medium bg-red-50 p-3 rounded-lg">{t('bookingError')}</div>}
+                                {submitStatus === 'success' && <div className="text-green-700 text-center font-medium bg-green-50 border border-green-200 p-3 rounded-lg text-sm">{t('bookingSuccess')}</div>}
+                                {submitStatus === 'error' && <div className="text-red-700 text-center font-medium bg-red-50 border border-red-200 p-3 rounded-lg text-sm">{t('bookingError')}</div>}
+                                {submitStatus === 'emailError' && <div className="text-red-700 text-center font-medium bg-red-50 border border-red-200 p-3 rounded-lg text-sm">{t('bookingError')}</div>}
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* About Section */}
-            <section className="py-20 bg-white/50">
+            {/* ========================== SERVICES ========================== */}
+            <section className="section bg-paper">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl font-bold text-gray-800 mb-4">{t('discoverDestinations')}</h2>
-                        <p className="text-xl text-gray-600 max-w-3xl mx-auto">{t('discoverSubtitle')}</p>
-                    </div>
-                    <div className="grid md:grid-cols-3 gap-8">
-                        <div className="text-center p-6 bg-white/70 rounded-xl shadow-lg">
-                            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4"><MapPin className="h-8 w-8 text-blue-600" /></div>
-                            <h3 className="text-xl font-semibold mb-3 text-gray-600">{t('cityTours')}</h3>
-                            <p className="text-gray-600">{t('cityToursDesc')}</p>
-                        </div>
-                        <div className="text-center p-6 bg-white/70 rounded-xl shadow-lg">
-                            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"><Car className="h-8 w-8 text-green-600" /></div>
-                            <h3 className="text-xl font-semibold mb-3 text-gray-600">{t('airportTransfers')}</h3>
-                            <p className="text-gray-600">{t('airportTransfersDesc')}</p>
-                        </div>
-                        <div className="text-center p-6 bg-white/70 rounded-xl shadow-lg">
-                            <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4"><Star className="h-8 w-8 text-purple-600" /></div>
-                            <h3 className="text-xl font-semibold mb-3 text-gray-600">{t('specialEvents')}</h3>
-                            <p className="text-gray-600">{t('specialEventsDesc')}</p>
-                        </div>
+                    <Reveal className="text-center max-w-2xl mx-auto">
+                        <span className="eyebrow is-centered justify-center">{t('eyebrowServices')}</span>
+                        <h2 className="mt-4 font-display text-3xl sm:text-4xl">{t('discoverDestinations')}</h2>
+                        <p className="mt-4 text-muted leading-relaxed">{t('discoverSubtitle')}</p>
+                    </Reveal>
+
+                    <div className="grid md:grid-cols-3 gap-6 lg:gap-8 mt-14">
+                        {services.map((s, i) => (
+                            <Reveal key={i} delay={i * 90}>
+                                <div className="card lift h-full p-8 text-center">
+                                    <div className="medallion mx-auto"><s.icon className="h-6 w-6" /></div>
+                                    <h3 className="mt-6 font-display text-xl">{s.title}</h3>
+                                    <p className="mt-3 text-muted text-sm leading-relaxed">{s.desc}</p>
+                                </div>
+                            </Reveal>
+                        ))}
                     </div>
                 </div>
             </section>
 
+            {/* ========================= HOW IT WORKS ======================= */}
+            <section className="section bg-navy-texture text-white">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <Reveal className="text-center max-w-2xl mx-auto">
+                        <span className="eyebrow eyebrow--light justify-center">{t('eyebrowHowItWorks')}</span>
+                        <h2 className="mt-4 font-display text-3xl sm:text-4xl text-white">{t('howItWorks')}</h2>
+                        <p className="mt-4 text-white/65 leading-relaxed">{t('howItWorksSubtitle')}</p>
+                    </Reveal>
+
+                    <div className="grid md:grid-cols-3 gap-8 mt-14 relative">
+                        {steps.map((step, i) => (
+                            <Reveal key={i} delay={i * 100} className="text-center md:text-left">
+                                <div className="flex items-center gap-4 justify-center md:justify-start">
+                                    <span className="font-display text-5xl text-gold/40 leading-none">{String(i + 1).padStart(2, '0')}</span>
+                                    <span className="medallion medallion--dark shrink-0"><step.icon className="h-6 w-6" /></span>
+                                </div>
+                                <h3 className="mt-5 font-display text-xl text-white">{step.title}</h3>
+                                <p className="mt-2 text-white/65 text-sm leading-relaxed">{step.desc}</p>
+                            </Reveal>
+                        ))}
+                    </div>
+
+                    <div className="text-center mt-12">
+                        <a href="#booking" className="btn btn-gold">{t('reserveYourRide')}<ArrowRight className="h-4 w-4" /></a>
+                    </div>
+                </div>
+            </section>
+
+            {/* ======================= DESTINATIONS ========================= */}
+            <section className="section bg-cream">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <Reveal className="text-center max-w-2xl mx-auto">
+                        <span className="eyebrow is-centered justify-center">{t('eyebrowDestinations')}</span>
+                        <h2 className="mt-4 font-display text-3xl sm:text-4xl">{t('destinationsTitle')}</h2>
+                        <p className="mt-4 text-muted leading-relaxed">{t('destinationsSubtitle')}</p>
+                    </Reveal>
+
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5 mt-12">
+                        {gallery.map((g, i) => (
+                            <Reveal key={i} delay={i * 80}>
+                                <div className="group relative rounded-2xl overflow-hidden aspect-[3/4] shadow-lg">
+                                    <Image
+                                        src={g.src}
+                                        alt={g.label}
+                                        fill
+                                        sizes="(max-width: 1024px) 50vw, 25vw"
+                                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-navy-950/85 via-navy-950/10 to-transparent" />
+                                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                                        <span className="inline-block h-px w-8 bg-gold mb-2" />
+                                        <h3 className="font-display text-white text-lg leading-tight">{g.label}</h3>
+                                    </div>
+                                </div>
+                            </Reveal>
+                        ))}
+                    </div>
+
+                    <Reveal className="flex flex-wrap justify-center gap-2.5 mt-10">
+                        {destinations.map((d) => (
+                            <span key={d} className="inline-flex items-center gap-1.5 text-sm text-navy-700 bg-white border border-gold/25 rounded-full px-4 py-1.5">
+                                <MapPin className="h-3.5 w-3.5 text-gold" />{d}
+                            </span>
+                        ))}
+                    </Reveal>
+                </div>
+            </section>
+
+            {/* ========================= TESTIMONIALS ======================= */}
             <ReviewSlider />
 
-            {/* Features Section */}
-            <section className="py-20">
+            {/* ===================== WHY CHOOSE US + CTA ==================== */}
+            <section className="section bg-paper">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
-                        <div>
-                            <h2 className="text-4xl font-bold text-gray-800 mb-6">{t('whyChooseUs')}</h2>
-                            <div className="space-y-6">
-                                <div className="flex items-start space-x-4">
-                                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0"><Clock className="h-5 w-5 text-blue-600" /></div>
-                                    <div>
-                                        <h3 className="text-lg font-semibold mb-2 text-gray-600">{t('availability247')}</h3>
-                                        <p className="text-gray-600">{t('availability247Desc')}</p>
+                    <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                        <Reveal>
+                            <span className="eyebrow">{t('eyebrowWhyUs')}</span>
+                            <h2 className="mt-4 font-display text-3xl sm:text-4xl">{t('whyChooseUs')}</h2>
+                            <div className="mt-8 space-y-7">
+                                {features.map((f, i) => (
+                                    <div key={i} className="flex items-start gap-5">
+                                        <span className="medallion shrink-0"><f.icon className="h-5 w-5" /></span>
+                                        <div>
+                                            <h3 className="font-display text-lg">{f.title}</h3>
+                                            <p className="mt-1 text-muted text-sm leading-relaxed">{f.desc}</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="flex items-start space-x-4">
-                                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"><Shield className="h-5 w-5 text-green-600" /></div>
-                                    <div>
-                                        <h3 className="text-lg font-semibold mb-2 text-gray-600">{t('safeInsured')}</h3>
-                                        <p className="text-gray-600">{t('safeInsuredDesc')}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-start space-x-4">
-                                    <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0"><Award className="h-5 w-5 text-purple-600" /></div>
-                                    <div>
-                                        <h3 className="text-lg font-semibold mb-2 text-gray-600">{t('competitiveRates')}</h3>
-                                        <p className="text-gray-600">{t('competitiveRatesDesc')}</p>
-                                    </div>
+                                ))}
+                            </div>
+                        </Reveal>
+
+                        <Reveal delay={120}>
+                            <div className="rounded-3xl bg-navy-texture p-8 sm:p-10 text-white relative overflow-hidden">
+                                <div className="absolute -top-16 -right-16 h-48 w-48 rounded-full bg-gold/10 blur-2xl" />
+                                <div className="relative">
+                                    <h3 className="font-display text-2xl sm:text-3xl text-white">{t('bookNowSave')}</h3>
+                                    <p className="mt-4 text-white/70 leading-relaxed">{t('ctaDescription')}</p>
+                                    <a href="#booking" className="btn btn-gold mt-8">{t('bookNowButton')}<ArrowRight className="h-4 w-4" /></a>
                                 </div>
                             </div>
-                        </div>
-                        <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-8 rounded-2xl text-white">
-                            <h3 className="text-2xl font-bold mb-4">{t('bookNowSave')}</h3>
-                            <p className="text-blue-100 mb-6">{t('ctaDescription')}</p>
-                            <button onClick={() => document.querySelector('.booking-form')?.scrollIntoView({ behavior: 'smooth' })} className="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
-                                {t('bookNowButton')}
-                            </button>
-                        </div>
+                        </Reveal>
                     </div>
                 </div>
             </section>
