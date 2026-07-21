@@ -190,6 +190,7 @@ const HomePageContent = () => {
                 EMAILJS_CONFIG.SERVICE_ID,
                 EMAILJS_CONFIG.BOOKING_TEMPLATE_ID,
                 {
+                    email: 'taxidgtrogir@outlook.com',
                     from_name: formData.email,
                     from_email: formData.email,
                     pickup_location: formData.startLocation,
